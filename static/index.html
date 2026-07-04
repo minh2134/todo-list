@@ -1,0 +1,16 @@
+<html>
+	<head>
+		<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.10/dist/htmx.min.js" integrity="sha384-H5SrcfygHmAuTDZphMHqBJLc3FhssKjG7w/CeCpFReSfwBWDTKpkzPP8c+cLsK+V" crossorigin="anonymous"></script>
+	</head>
+	<body>
+		<p id="target">Hello world!</p>
+		<button
+				hx-get="/clicked"
+				hx-trigger="click"
+				hx-target="#target"
+				hx-swap="innerHTML"
+		>
+			Click me!
+		</button>
+	</body>
+</html>
