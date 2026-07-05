@@ -1,8 +1,20 @@
 package main
 
-import "net/http"
+import (
+	"html/template"
+	"net/http"
+	"todo-list/internal/task"
+)
+
+var templ *template.Template
 
 func main() {
+	var err error
+	templ, err = template.New("Task").ParseGlob("./templ/*.html")
+	if err != nil {
+		panic(err)
+	}
+
 	mux := http.NewServeMux()
 
 	mux.Handle("GET /", http.FileServer(http.Dir("./static")))
@@ -21,6 +33,8 @@ func clicked(w http.ResponseWriter, r *http.Request) {
 
 func list(w http.ResponseWriter, r *http.Request) {
 	// TODO: handle query parameters to filter the result
+	tsk := task.MakeTask("Task1", "hello")
+	templ.ExecuteTemplate(w, "task", tsk)
 }
 
 func add(w http.ResponseWriter, r *http.Request) {
