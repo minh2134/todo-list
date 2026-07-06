@@ -7,7 +7,10 @@ import (
 	"todo-list/internal/task"
 )
 
-var templ *template.Template
+var (
+	templ *template.Template
+	// TODO: set up a sqlite file
+)
 
 func main() {
 	var err error
@@ -35,8 +38,8 @@ func list(w http.ResponseWriter, r *http.Request) {
 
 func add(w http.ResponseWriter, r *http.Request) {
 	// TODO: add the posted task
-	fmt.Println(r.PostFormValue("name"))
-	fmt.Println(r.PostFormValue("desc"))
+	tsk := task.MakeTask(r.PostFormValue("name"), r.PostFormValue("desc"))
+	fmt.Println(tsk.Name, tsk.Desc, tsk.Completed)
 }
 
 func del(w http.ResponseWriter, r *http.Request) {

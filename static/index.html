@@ -9,17 +9,18 @@
 			hx-trigger="click, load, close from:#add"
 			hx-target="#target"
 			hx-swap="innerHTML">
-			Refresh task list
+			Refresh
 		</button>
 		<dialog id="add">
 			<form 
 				hx-post="/task"
-				hx-swap="none">
+				hx-swap="none"
+				hx-on::after-request="if(event.detail.successful) { add.close() }; ">
 
 				<fieldset>
 					<legend>Add A Task</legend>
 					<label for=name>Name:</label>
-					<input type=text name=name placeholder="Give the task a name">
+					<input type=text name=name placeholder="Give the task a name" required>
 					<br>
 					<label for=desc>Description:</label>
 					<input type=text name=desc placeholder="Task description">
@@ -27,12 +28,12 @@
 				<br>
 
 				<button onclick="add.close()">Close</button>
-				<button type="submit" onclick="add.close()">Submit</button>
+				<button type="submit" >Submit</button>
 			</form>
 		</dialog>
 
 		<button onclick="add.showModal()">
-			Pop this open
+			Add Task
 		</button>
 	</body>
 </html>
