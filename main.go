@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
 	"net/http"
 	"todo-list/internal/database"
@@ -45,9 +44,8 @@ func list(w http.ResponseWriter, r *http.Request) {
 }
 
 func add(w http.ResponseWriter, r *http.Request) {
-	// TODO: add the posted task
 	tsk := task.MakeTask(r.PostFormValue("name"), r.PostFormValue("desc"))
-	fmt.Println(tsk.Name, tsk.Desc, tsk.Completed)
+	w.WriteHeader(204)
 	db.InsertTask(tsk)
 }
 
