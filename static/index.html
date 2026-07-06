@@ -3,14 +3,36 @@
 		<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.10/dist/htmx.min.js" integrity="sha384-H5SrcfygHmAuTDZphMHqBJLc3FhssKjG7w/CeCpFReSfwBWDTKpkzPP8c+cLsK+V" crossorigin="anonymous"></script>
 	</head>
 	<body>
-		<p id="target">Hello world!</p>
+		<p id="target">Placeholder</p>
 		<button
-				hx-get="/task"
-				hx-trigger="click"
-				hx-target="#target"
-				hx-swap="innerHTML"
-		>
-			Click me!
+			hx-get="/task"
+			hx-trigger="click, load, close from:#add"
+			hx-target="#target"
+			hx-swap="innerHTML">
+			Refresh task list
+		</button>
+		<dialog id="add">
+			<form 
+				hx-post="/task"
+				hx-swap="none">
+
+				<fieldset>
+					<legend>Add A Task</legend>
+					<label for=name>Name:</label>
+					<input type=text name=name placeholder="Give the task a name">
+					<br>
+					<label for=desc>Description:</label>
+					<input type=text name=desc placeholder="Task description">
+				</fieldset>
+				<br>
+
+				<button onclick="add.close()">Close</button>
+				<button type="submit" onclick="add.close()">Submit</button>
+			</form>
+		</dialog>
+
+		<button onclick="add.showModal()">
+			Pop this open
 		</button>
 	</body>
 </html>
