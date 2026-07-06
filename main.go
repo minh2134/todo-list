@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"todo-list/internal/database"
 	"todo-list/internal/task"
 )
 
 var (
 	templ *template.Template
-	// TODO: set up a sqlite file
+	db    database.Database
 )
 
 func main() {
@@ -18,6 +19,13 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	// TODO: read env var instead of hard code
+	db, err = database.Open("todo.db")
+	if err != nil {
+		panic("Database error: " + err.Error())
+	}
+	defer db.Close()
 
 	mux := http.NewServeMux()
 
@@ -40,6 +48,7 @@ func add(w http.ResponseWriter, r *http.Request) {
 	// TODO: add the posted task
 	tsk := task.MakeTask(r.PostFormValue("name"), r.PostFormValue("desc"))
 	fmt.Println(tsk.Name, tsk.Desc, tsk.Completed)
+	db.InsertTask(tsk)
 }
 
 func del(w http.ResponseWriter, r *http.Request) {
