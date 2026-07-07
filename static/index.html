@@ -3,14 +3,17 @@
 		<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.10/dist/htmx.min.js" integrity="sha384-H5SrcfygHmAuTDZphMHqBJLc3FhssKjG7w/CeCpFReSfwBWDTKpkzPP8c+cLsK+V" crossorigin="anonymous"></script>
 	</head>
 	<body>
-		<p id="target">Placeholder</p>
+		<button onclick="add.showModal()">
+			Add Task
+		</button>
 		<button
 			hx-get="/task"
 			hx-trigger="click, load, close from:#add"
-			hx-target="#target"
+			hx-target="#tasklist"
 			hx-swap="innerHTML">
 			Refresh
 		</button>
+		<div id="tasklist">Placeholder</div>
 		<dialog id="add">
 			<form 
 				hx-post="/task"
@@ -32,8 +35,5 @@
 			</form>
 		</dialog>
 
-		<button onclick="add.showModal()">
-			Add Task
-		</button>
 	</body>
 </html>

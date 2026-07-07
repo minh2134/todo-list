@@ -1,10 +1,16 @@
-{{ block "task" . }}
-<div>
+{{ define "task" }}
 	<h3>{{ .Name }}</h3>
 	<p>{{ .Desc }}</p>
 	<p>Completed: {{ .Completed }}</p>
 
 	<label for=completed>Completed:</label>
 	<input type=checkbox id=completed {{if .Completed }} checked {{end}}>
-</div>
+{{ end }}
+
+{{ block "tasks" . }}
+	{{ range $key, $task := . }}
+	<div id="{{ $key }}">
+		{{ template "task" . }}
+	</div>
+	{{ end }}
 {{ end }}

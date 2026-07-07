@@ -51,10 +51,7 @@ func list(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(os.Stderr, err)
 	}
 
-	for _, tsk := range tsks {
-		fmt.Println(tsk.Completed)
-		templ.ExecuteTemplate(w, "task", tsk)
-	}
+	templ.ExecuteTemplate(w, "tasks", tsks)
 }
 
 func add(w http.ResponseWriter, r *http.Request) {
