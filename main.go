@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
+	"os"
 	"todo-list/internal/database"
 	"todo-list/internal/task"
 )
@@ -19,8 +21,11 @@ func main() {
 		panic(err)
 	}
 
-	// TODO: read env var instead of hard code
-	db, err = database.Open("todo.db")
+	dbFile := os.Getenv("TODO_DB_FILE")
+	if dbFile == "" {
+		dbFile = "todo.db"
+	}
+	db, err = database.Open(dbFile)
 	if err != nil {
 		panic("Database error: " + err.Error())
 	}
@@ -34,6 +39,8 @@ func main() {
 	mux.HandleFunc("POST /task", add)
 	mux.HandleFunc("DELETE /task", del)
 	mux.HandleFunc("PATCH /task", edit)
+
+	fmt.Println("Ready!")
 	http.ListenAndServe(":3000", mux)
 }
 
