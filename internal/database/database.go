@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"strconv"
 	"strings"
 	"time"
 	"todo-list/internal/task"
@@ -142,19 +141,21 @@ INSERT INTO tasks (name, description, completed) VALUES (?,?,?);
 }
 
 func (db Database) GetTasks(lq ListQuery) (map[int]task.Task, error) {
-	var query strings.Builder
+	var (
+		query strings.Builder
+		args  []any
+	)
 	query.WriteString(`SELECT * FROM tasks WHERE 1=1`)
 	if lq.Name != "" {
-		query.WriteString(" AND name LIKE ")
-		query.WriteString("\"")
-		query.WriteString(lq.Name)
-		query.WriteString("\"")
+		query.WriteString(" AND name LIKE ?")
+		// search all matching substrings instead of exact
+		args = append(args, "%"+lq.Name+"%")
 	}
 	if lq.Completed != ALL {
-		query.WriteString(" AND completed=")
-		query.WriteString(strconv.Itoa(int(lq.Completed)))
-		fmt.Println(query.String())
+		query.WriteString(" AND completed=?")
+		args = append(args, lq.Completed)
 	}
+	fmt.Println(query.String(), args)
 
 	tsks := make(map[int]task.Task)
 
@@ -166,7 +167,7 @@ func (db Database) GetTasks(lq ListQuery) (map[int]task.Task, error) {
 	}
 	defer tx.Rollback()
 
-	rows, err := tx.Query(query.String())
+	rows, err := tx.Query(query.String(), args...)
 	if err != nil {
 		return tsks, err
 	}
