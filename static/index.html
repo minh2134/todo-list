@@ -5,7 +5,7 @@
 	<body>
 		<form
 			hx-get="/task"
-			hx-trigger="input changed delay:200ms, change from:.filter, load, close from:#add"
+			hx-trigger="input changed delay:200ms, change from:.filter, load, close from:#add, click[event.target.classList.contains('delete')] from:body"
 			hx-target="#tasklist"
 			hx-swap="innerHTML">
 

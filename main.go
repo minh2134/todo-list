@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 	"os"
+	"strconv"
 	"todo-list/internal/database"
 	"todo-list/internal/task"
 )
@@ -37,14 +38,13 @@ func main() {
 
 	mux.HandleFunc("GET /task", list)
 	mux.HandleFunc("POST /task", add)
-	mux.HandleFunc("DELETE /task", del)
-	mux.HandleFunc("PATCH /task", edit)
+	mux.HandleFunc("DELETE /task/{id}", del)
+	mux.HandleFunc("PATCH /task/{id}", edit)
 
 	http.ListenAndServe(":3000", mux)
 }
 
 func list(w http.ResponseWriter, r *http.Request) {
-	// TODO: handle query parameters to filter the result
 	completed := database.ALL
 	switch r.FormValue("completed") {
 	case "true":
@@ -73,7 +73,16 @@ func add(w http.ResponseWriter, r *http.Request) {
 }
 
 func del(w http.ResponseWriter, r *http.Request) {
-	// TODO: delete the task (handle path and query params)
+	// This always succeed even if the input is non-existent or non-sensical
+	w.WriteHeader(204)
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		return
+	}
+	err = db.DeleteTask(id)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+	}
 }
 
 func edit(w http.ResponseWriter, r *http.Request) {

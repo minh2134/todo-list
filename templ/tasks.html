@@ -4,13 +4,18 @@
 	<p>Completed: {{ .Completed }}</p>
 
 	<label for=completed>Completed:</label>
-	<input type=checkbox id=completed {{if .Completed }} checked {{end}}>
+	<input type=checkbox {{if .Completed }} checked {{end}}>
 {{ end }}
 
 {{ block "tasks" . }}
 	{{ range $key, $task := . }}
 	<div id="{{ $key }}">
 		{{ template "task" . }}
+		<button
+			class="delete"
+			hx-delete="/task/{{ $key }}">
+			Delete
+		</button>
 	</div>
 	{{ end }}
 {{ end }}

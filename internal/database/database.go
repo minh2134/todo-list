@@ -3,7 +3,6 @@ package database
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	"strings"
 	"time"
 	"todo-list/internal/task"
@@ -155,7 +154,6 @@ func (db Database) GetTasks(lq ListQuery) (map[int]task.Task, error) {
 		query.WriteString(" AND completed=?")
 		args = append(args, lq.Completed)
 	}
-	fmt.Println(query.String(), args)
 
 	tsks := make(map[int]task.Task)
 
@@ -191,4 +189,23 @@ func (db Database) GetTasks(lq ListQuery) (map[int]task.Task, error) {
 
 	tx.Commit()
 	return tsks, err
+}
+
+func (db Database) DeleteTask(id int) error {
+	query := "DELETE FROM tasks WHERE id=?"
+
+	conn := db.readWrite
+	tx, err := conn.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	_, err = tx.Exec(query, id)
+	if err != nil {
+		return err
+	}
+
+	tx.Commit()
+	return err
 }
