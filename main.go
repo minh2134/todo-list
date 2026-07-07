@@ -45,7 +45,19 @@ func main() {
 
 func list(w http.ResponseWriter, r *http.Request) {
 	// TODO: handle query parameters to filter the result
-	tsks, err := db.GetAllTasks()
+	completed := database.ALL
+	switch r.FormValue("completed") {
+	case "true":
+		completed = database.COMPLETED
+	case "false":
+		completed = database.INCOMPLETE
+	}
+	query := database.ListQuery{
+		Name:      r.FormValue("name"),
+		Completed: completed,
+	}
+
+	tsks, err := db.GetTasks(query)
 	if err != nil {
 		w.WriteHeader(500)
 		fmt.Fprintln(os.Stderr, err)

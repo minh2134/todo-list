@@ -3,22 +3,33 @@
 		<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.10/dist/htmx.min.js" integrity="sha384-H5SrcfygHmAuTDZphMHqBJLc3FhssKjG7w/CeCpFReSfwBWDTKpkzPP8c+cLsK+V" crossorigin="anonymous"></script>
 	</head>
 	<body>
-		<button onclick="add.showModal()">
-			Add Task
-		</button>
-		<button
+		<form
 			hx-get="/task"
-			hx-trigger="click, load, close from:#add"
+			hx-trigger="input changed delay:200ms, change from:.filter, load, close from:#add"
 			hx-target="#tasklist"
 			hx-swap="innerHTML">
-			Refresh
+
+			<h3>Search Tasks</h3>
+			<input type=text name="name" placeholder="Start typing to search">
+
+			<div class=filter>
+				<input type=radio name=completed value=all id=all>
+				<label for=all>All</label>
+				<input type=radio name=completed value=true id=completed>
+				<label for=completed>Completed</label>
+				<input type=radio name=completed value=false id=incomplete>
+				<label for=incomplete>Incomplete</label>
+			</div>
+		</form>
+		<button onclick="add.showModal()">
+			Add Task
 		</button>
 		<div id="tasklist">Placeholder</div>
 		<dialog id="add">
 			<form 
 				hx-post="/task"
 				hx-swap="none"
-				hx-on::after-request="if(event.detail.successful) { add.close() }; ">
+				hx-on::after-request="if(event.detail.successful) { add.close() }">
 
 				<fieldset>
 					<legend>Add A Task</legend>

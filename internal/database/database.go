@@ -3,6 +3,9 @@ package database
 import (
 	"database/sql"
 	"errors"
+	"fmt"
+	"strconv"
+	"strings"
 	"time"
 	"todo-list/internal/task"
 
@@ -138,10 +141,21 @@ INSERT INTO tasks (name, description, completed) VALUES (?,?,?);
 	return tId, err
 }
 
-func (db Database) GetAllTasks() (map[int]task.Task, error) {
-	query := `
-SELECT * FROM tasks
-	`
+func (db Database) GetTasks(lq ListQuery) (map[int]task.Task, error) {
+	var query strings.Builder
+	query.WriteString(`SELECT * FROM tasks WHERE 1=1`)
+	if lq.Name != "" {
+		query.WriteString(" AND name LIKE ")
+		query.WriteString("\"")
+		query.WriteString(lq.Name)
+		query.WriteString("\"")
+	}
+	if lq.Completed != ALL {
+		query.WriteString(" AND completed=")
+		query.WriteString(strconv.Itoa(int(lq.Completed)))
+		fmt.Println(query.String())
+	}
+
 	tsks := make(map[int]task.Task)
 
 	conn := db.readOnly
@@ -152,7 +166,7 @@ SELECT * FROM tasks
 	}
 	defer tx.Rollback()
 
-	rows, err := tx.Query(query)
+	rows, err := tx.Query(query.String())
 	if err != nil {
 		return tsks, err
 	}
