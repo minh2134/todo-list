@@ -1,7 +1,6 @@
 {{ define "task" }}
 	<h3>{{ .Name }}</h3>
 	<p>{{ .Desc }}</p>
-	<p>Completed: {{ .Completed }}</p>
 
 	<label for=completed>Completed:</label>
 	<input type=checkbox {{if .Completed }} checked {{end}}>
