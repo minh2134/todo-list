@@ -69,7 +69,14 @@ func list(w http.ResponseWriter, r *http.Request) {
 func add(w http.ResponseWriter, r *http.Request) {
 	tsk := task.MakeTask(r.PostFormValue("name"), r.PostFormValue("desc"))
 	w.WriteHeader(204)
-	db.InsertTask(tsk)
+	id, err := db.InsertTask(tsk)
+	if err != nil {
+		w.WriteHeader(500)
+		fmt.Fprintln(os.Stderr, err)
+		return
+	}
+
+	fmt.Println("inserted new task, id:", id)
 }
 
 func del(w http.ResponseWriter, r *http.Request) {
