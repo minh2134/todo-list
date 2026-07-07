@@ -109,8 +109,6 @@ func edit(w http.ResponseWriter, r *http.Request) {
 		if r.FormValue("completed") == "" {
 			completed = database.INCOMPLETE
 		}
-	} else {
-		fmt.Println("we are toggling")
 	}
 
 	query := database.EditQuery{
