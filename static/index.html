@@ -5,12 +5,12 @@
 	<body>
 		<form
 			hx-get="/task"
-			hx-trigger="input changed delay:200ms, change from:.filter, load, close from:#add, click[event.target.classList.contains('delete')] from:body"
+			hx-trigger="input changed delay:200ms, change from:.filter, load, close from:#add, click[event.target.classList.contains('delete')] from:body, click from:#refresh"
 			hx-target="#tasklist"
 			hx-swap="innerHTML">
 
 			<h3>Search Tasks</h3>
-			<input type=text name="name" placeholder="Start typing to search">
+			<input type=text name="name" placeholder="Start typing to search" onkeydown="return event.key != 'Enter';">
 
 			<div class=filter>
 				<input type=radio name=completed value=all id=all>
@@ -24,6 +24,7 @@
 		<button onclick="add.showModal()">
 			Add Task
 		</button>
+		<button id=refresh>Refresh</button>
 		<div id="tasklist">Placeholder</div>
 		<dialog id="add">
 			<form 

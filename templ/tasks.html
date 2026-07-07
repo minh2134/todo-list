@@ -9,13 +9,21 @@
 
 {{ block "tasks" . }}
 	{{ range $key, $task := . }}
-	<div id="{{ $key }}">
+	<div 
+		id="{{ $key }}"
+		hx-patch="/task/{{ $key }}?toggle=true"
+		hx-trigger="change"
+		hx-swap=none>
+
 		{{ template "task" . }}
 		<button
 			class="delete"
 			hx-delete="/task/{{ $key }}">
 			Delete
 		</button>
+		<input 
+			type=hidden
+			hx-swap=none>
 	</div>
 	{{ end }}
 {{ end }}

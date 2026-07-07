@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"strings"
 	"time"
 	"todo-list/internal/task"
@@ -21,7 +22,7 @@ type Database struct {
 }
 
 var (
-	ErrorAddingTransaction error = errors.New("Something wrong happened with the transaction")
+	ErrTaskNotFound error = errors.New("No task fit the criteria")
 )
 
 func Open(filename string) (Database, error) {
@@ -202,6 +203,47 @@ func (db Database) DeleteTask(id int) error {
 	defer tx.Rollback()
 
 	_, err = tx.Exec(query, id)
+	if err != nil {
+		return err
+	}
+
+	tx.Commit()
+	return err
+}
+
+func (db Database) EditTask(eq EditQuery) error {
+	var (
+		query strings.Builder
+		args  []any
+	)
+	query.WriteString(`UPDATE tasks SET id=id`)
+	if eq.Name != "" {
+		query.WriteString(", name=?")
+		// search all matching substrings instead of exact
+		args = append(args, eq.Name)
+	}
+	if eq.Desc != "" {
+		query.WriteString(", desc=?")
+		args = append(args, eq.Desc)
+	}
+	if eq.Completed != ALL {
+		query.WriteString(", completed=?")
+		args = append(args, eq.Completed)
+	} else {
+		query.WriteString(", completed = CASE WHEN completed = 1 THEN 0 ELSE 1 END")
+	}
+	query.WriteString(` WHERE id=?`)
+	args = append(args, eq.Id)
+	fmt.Println(query.String())
+
+	conn := db.readWrite
+	tx, err := conn.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	_, err = tx.Exec(query.String(), args...)
 	if err != nil {
 		return err
 	}

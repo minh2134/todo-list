@@ -94,4 +94,35 @@ func del(w http.ResponseWriter, r *http.Request) {
 
 func edit(w http.ResponseWriter, r *http.Request) {
 	// TODO: edit the task's data based on body (handle path)
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		w.WriteHeader(400)
+		w.Write([]byte("id not found"))
+		return
+	}
+
+	// database.ALL signifies a toggle signal here
+	completed := database.ALL
+	if r.FormValue("toggle") != "true" {
+		switch r.FormValue("completed") {
+		case "true":
+			completed = database.COMPLETED
+		case "false":
+			completed = database.INCOMPLETE
+		}
+	} else {
+		fmt.Println("we are toggling")
+	}
+
+	query := database.EditQuery{
+		Id:        id,
+		Name:      r.FormValue("name"),
+		Desc:      r.FormValue("desc"),
+		Completed: completed,
+	}
+	err = db.EditTask(query)
+	if err != nil {
+		fmt.Println("error")
+		fmt.Fprintln(os.Stderr, err)
+	}
 }
