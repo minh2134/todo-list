@@ -6,7 +6,7 @@ Requirements:
 
 Instructions: At root folder simply type the command:
 ```bash
-$ go run .
+$ CGO_ENABLED='1' go run .
 ```
 
 And the application should be available at `localhost:3000`
