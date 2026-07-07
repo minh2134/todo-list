@@ -40,14 +40,21 @@ func main() {
 	mux.HandleFunc("DELETE /task", del)
 	mux.HandleFunc("PATCH /task", edit)
 
-	fmt.Println("Ready!")
 	http.ListenAndServe(":3000", mux)
 }
 
 func list(w http.ResponseWriter, r *http.Request) {
 	// TODO: handle query parameters to filter the result
-	tsk := task.MakeTask("Task1", "hello")
-	templ.ExecuteTemplate(w, "task", tsk)
+	tsks, err := db.GetAllTasks()
+	if err != nil {
+		w.WriteHeader(500)
+		fmt.Fprintln(os.Stderr, err)
+	}
+
+	for _, tsk := range tsks {
+		fmt.Println(tsk.Completed)
+		templ.ExecuteTemplate(w, "task", tsk)
+	}
 }
 
 func add(w http.ResponseWriter, r *http.Request) {

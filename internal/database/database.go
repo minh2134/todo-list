@@ -161,7 +161,7 @@ SELECT * FROM tasks
 		var (
 			name      string
 			desc      string
-			completed string
+			completed bool
 			id        int
 		)
 		err := rows.Scan(&id, &name, &desc, &completed)
@@ -169,6 +169,7 @@ SELECT * FROM tasks
 			return tsks, err
 		}
 		tsk := task.MakeTask(name, desc)
+		tsk.Completed = completed
 
 		tsks[id] = tsk
 	}

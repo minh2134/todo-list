@@ -1,7 +1,10 @@
 {{ block "task" . }}
 <div>
-	<p>Name: {{ .Name }}</p>
-	<p>Desc: {{ .Desc }}</p>
+	<h3>{{ .Name }}</h3>
+	<p>{{ .Desc }}</p>
 	<p>Completed: {{ .Completed }}</p>
+
+	<label for=completed>Completed:</label>
+	<input type=checkbox id=completed {{if .Completed }} checked {{end}}>
 </div>
 {{ end }}
