@@ -105,10 +105,8 @@ func edit(w http.ResponseWriter, r *http.Request) {
 	// database.ALL signifies a toggle signal here
 	completed := database.ALL
 	if r.FormValue("toggle") != "true" {
-		switch r.FormValue("completed") {
-		case "true":
-			completed = database.COMPLETED
-		case "false":
+		completed = database.COMPLETED
+		if r.FormValue("completed") == "" {
 			completed = database.INCOMPLETE
 		}
 	} else {
