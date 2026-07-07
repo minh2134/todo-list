@@ -28,7 +28,9 @@
 		<label for=completed> Completed: </label>
 		<input type=checkbox name=completed {{ if .Task.Completed }} checked {{ end }}>
 	</fieldset>
-	<button onclick="this.closest('dialog').close()">Close</button>
-	<button type=submit>Submit</button>
+	<div class="flex justify-end w-full gap-2">
+		<button type=button onclick="this.closest('dialog').close()" class="w-1/4 max-w-24 rounded-md border border-slate-800 bg-slate-800 px-4 py-2 text-center font-sans text-sm font-medium text-slate-50 hover:border-slate-700 hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none ml-auto">Close</button>
+		<button type="submit" class="w-1/4 max-w-24 rounded-md border border-slate-800 bg-slate-800 px-4 py-2 text-center font-sans text-sm font-medium text-slate-50 hover:border-slate-700 hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none">Submit</button>
+	</div>
 </form>
 {{ end }}
