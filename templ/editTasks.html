@@ -1,0 +1,23 @@
+{{ define "editTasks" }}
+<form
+	hx-patch="/task/{{ .Id }}"
+	hx-swap="none"
+	hx-on::after-request="if(event.detail.successful) { this.closest('dialog').close() }">
+
+	<fieldset>
+		<legend>Edit Task {{ .Id }}</legend>
+		<label for=name>New name:</label>
+		<input type=text name=name value="{{ .Task.Name }}" placeholder="Give the task a new name" required>
+		<br>
+
+		<label for=desc>New Description:</label>
+		<input type=text name=desc value="{{ .Task.Desc }}" placeholder="Give the task a new description">
+		<br>
+	
+		<label for=completed> Completed</label>
+		<input type=checkbox name=completed {{ if .Task.Completed }} checked {{ end }}>
+	</fieldset>
+	<button onclick="this.closest('dialog').close()">Close</button>
+	<button type=submit>Submit</button>
+</form>
+{{ end }}

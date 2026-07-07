@@ -21,9 +21,13 @@
 			hx-delete="/task/{{ $key }}">
 			Delete
 		</button>
-		<input 
-			type=hidden
-			hx-swap=none>
+		<button
+			hx-get="/task/{{ $key }}"
+			hx-swap=innerHTML
+			hx-target="#edit">
+
+			Edit
+		</button>
 	</div>
 	{{ end }}
 {{ end }}

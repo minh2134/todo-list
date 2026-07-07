@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -37,6 +38,7 @@ func main() {
 	mux.Handle("GET /", http.FileServer(http.Dir("./static")))
 
 	mux.HandleFunc("GET /task", list)
+	mux.HandleFunc("GET /task/{id}", editDiag)
 	mux.HandleFunc("POST /task", add)
 	mux.HandleFunc("DELETE /task/{id}", del)
 	mux.HandleFunc("PATCH /task/{id}", edit)
@@ -93,11 +95,10 @@ func del(w http.ResponseWriter, r *http.Request) {
 }
 
 func edit(w http.ResponseWriter, r *http.Request) {
-	// TODO: edit the task's data based on body (handle path)
 	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {
 		w.WriteHeader(400)
-		w.Write([]byte("id not found"))
+		w.Write([]byte("id not valid"))
 		return
 	}
 
@@ -122,7 +123,32 @@ func edit(w http.ResponseWriter, r *http.Request) {
 	}
 	err = db.EditTask(query)
 	if err != nil {
-		fmt.Println("error")
+		w.WriteHeader(500)
 		fmt.Fprintln(os.Stderr, err)
 	}
+}
+
+func editDiag(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		w.WriteHeader(400)
+		w.Write([]byte("id not valid"))
+		return
+	}
+
+	tsk, err := db.GetTask(id)
+	if err == sql.ErrNoRows {
+		w.WriteHeader(404)
+		w.Write([]byte("id not found"))
+	}
+
+	data := struct {
+		Id   int
+		Task task.Task
+	}{
+		Id:   id,
+		Task: tsk,
+	}
+
+	templ.ExecuteTemplate(w, "editTasks", data)
 }
