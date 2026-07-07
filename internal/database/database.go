@@ -248,16 +248,18 @@ func (db Database) EditTask(eq EditQuery) error {
 		query strings.Builder
 		args  []any
 	)
-	query.WriteString(`UPDATE tasks SET description=?`)
-	args = append(args, eq.Desc)
-	if eq.Name != "" { // ensure it has a name
-		query.WriteString(", name=?")
-		// search all matching substrings instead of exact
-		args = append(args, eq.Name)
-	}
+	query.WriteString(`UPDATE tasks SET id=id`)
 	if eq.Completed != ALL {
 		query.WriteString(", completed=?")
 		args = append(args, eq.Completed)
+
+		query.WriteString(", description=?")
+		args = append(args, eq.Desc)
+		if eq.Name != "" { // ensure it has a name
+			query.WriteString(", name=?")
+			// search all matching substrings instead of exact
+			args = append(args, eq.Name)
+		}
 	} else {
 		query.WriteString(", completed = CASE WHEN completed = 1 THEN 0 ELSE 1 END")
 	}
