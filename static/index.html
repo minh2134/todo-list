@@ -10,8 +10,13 @@
 			hx-target="#tasklist"
 			hx-swap="innerHTML">
 
-			<h3>Search Tasks</h3>
-			<input type=text name="name" placeholder="Start typing to search" onkeydown="return event.key != 'Enter';">
+			<h3>Todo App</h3>
+			<input 
+				type=text 
+				name="name" 
+				placeholder="Start typing to search"
+				class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+				onkeydown="return event.key != 'Enter';">
 
 			<div class=filter>
 				<input type=radio name=completed value=all id=all>
@@ -22,10 +27,20 @@
 				<label for=incomplete>Incomplete</label>
 			</div>
 		</form>
-		<button onclick="add.showModal()">
-			Add Task
-		</button>
-		<button id=refresh>Refresh</button>
+		<div class="pb-4">
+			<button 
+				class="w-1/4 max-w-30 rounded-md border border-slate-800 bg-slate-800 px-4 py-2 text-center font-sans text-sm font-medium text-slate-50 hover:border-slate-700 hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none ml-auto"
+				onclick="add.showModal()">
+
+				Add Task
+			</button>
+			<button
+				class="w-1/4 max-w-24 rounded-md border border-slate-800 bg-slate-800 px-4 py-2 text-center font-sans text-sm font-medium text-slate-50 hover:border-slate-700 hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none ml-auto"
+				id=refresh>
+
+				Refresh
+			</button>
+		</div>
 		<div id="tasklist" class="flex flex-row gap-4">Placeholder</div>
 		<dialog id="add">
 			<form 
@@ -36,15 +51,16 @@
 				<fieldset>
 					<legend>Add A Task</legend>
 					<label for=name>Name:</label>
-					<input type=text name=name placeholder="Give the task a name" required>
+					<input type=text class="border-b" name=name placeholder="Give the task a name" required>
 					<br>
 					<label for=desc>Description:</label>
-					<input type=text name=desc placeholder="Task description">
+					<textarea type=text class="border-b w-full" name=desc placeholder="Task description"></textarea>
 				</fieldset>
 				<br>
-
-				<button onclick="add.close()">Close</button>
-				<button type="submit" >Submit</button>
+				<div class="flex justify-end w-full gap-2">
+					<button onclick="add.close()" class="w-1/4 max-w-24 rounded-md border border-slate-800 bg-slate-800 px-4 py-2 text-center font-sans text-sm font-medium text-slate-50 hover:border-slate-700 hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none ml-auto">Close</button>
+					<button type="submit" class="w-1/4 max-w-24 rounded-md border border-slate-800 bg-slate-800 px-4 py-2 text-center font-sans text-sm font-medium text-slate-50 hover:border-slate-700 hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none">Submit</button>
+				</div>
 			</form>
 		</dialog>
 		<dialog id="edit" hx-on::after-swap="this.showModal()">Edit A Task</dialog>
