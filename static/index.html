@@ -41,12 +41,12 @@
 				Refresh
 			</button>
 		</div>
-		<div id="tasklist" class="flex flex-row gap-4">Placeholder</div>
+		<div id="tasklist" class="flex flex-row flex-wrap gap-4">Placeholder</div>
 		<dialog id="add">
 			<form 
 				hx-post="/task"
 				hx-swap="none"
-				hx-on::after-request="if(event.detail.successful) { add.close() }">
+				hx-on::after-request="if(event.detail.successful) { add.close(); this.reset() }">
 
 				<fieldset>
 					<legend>Add A Task</legend>

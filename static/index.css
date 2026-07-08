@@ -256,6 +256,9 @@
   .flex-row {
     flex-direction: row;
   }
+  .flex-wrap {
+    flex-wrap: wrap;
+  }
   .justify-end {
     justify-content: flex-end;
   }
